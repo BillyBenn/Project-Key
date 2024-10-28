@@ -2,30 +2,16 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform targObj;  // Об'єкт, за яким стежить камера
-    public int camHeigh = 0;
-    public int camMoveSpeed = 0;
-    private Camera cam;
+    private Vector3 offset = new Vector3(0, 4, 15);
+    private float smoothTime = 0.25f;
+    private Vector3 velocity = Vector3.zero;
 
-    void Start()
-    {
-        cam = Camera.main;  // Основна камера
-    }
-
-    void FixedUpdate()
-    {
-
-    }
+    [SerializeField] private Transform target;
 
     void Update()
     {
-        Vector3 camPos = cam.transform.position;
-        Vector3 objPos = targObj.position;
-        //transform.localPosition = new Vector3(objPos.x, objPos.y, objPos.z + camHeigh);
-
-        if (objPos.x > camPos.x)
-        {
-            transform.localPosition += new Vector3(3, 0, 0) * Time.smoothDeltaTime;
-        }
+        Vector3 targetPosition = target.position + offset;
+        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+        
     }
 }
